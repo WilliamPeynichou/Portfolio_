@@ -1,9 +1,35 @@
+import { useState } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 import Header from '../layout/header'
 import Footer from '../layout/footer'
 
 function Contact() {
   const { language } = useLanguage()
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    
+    // Construction du lien mailto
+    const subject = encodeURIComponent("Message Portfolio")
+    const body = encodeURIComponent(
+      `Nom: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    )
+    
+    window.location.href = `mailto:williampeynichou@gmail.com?subject=${subject}&body=${body}`
+  }
 
   const content = {
     fr: {
@@ -79,11 +105,15 @@ function Contact() {
           </div>
 
           {/* Form */}
-          <form className="flex flex-col gap-8">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
             <div className="flex flex-col gap-2">
               <label className="text-sm font-mono text-gray-500 uppercase tracking-widest">{t.form.name}</label>
               <input 
                 type="text" 
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
                 className="bg-transparent border-b border-white/20 py-4 text-xl focus:outline-none focus:border-white transition-colors"
                 placeholder="..."
               />
@@ -93,6 +123,10 @@ function Contact() {
               <label className="text-sm font-mono text-gray-500 uppercase tracking-widest">{t.form.email}</label>
               <input 
                 type="email" 
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
                 className="bg-transparent border-b border-white/20 py-4 text-xl focus:outline-none focus:border-white transition-colors"
                 placeholder="..."
               />
@@ -102,6 +136,10 @@ function Contact() {
               <label className="text-sm font-mono text-gray-500 uppercase tracking-widest">{t.form.message}</label>
               <textarea 
                 rows="4"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
                 className="bg-transparent border-b border-white/20 py-4 text-xl focus:outline-none focus:border-white transition-colors resize-none"
                 placeholder="..."
               />
