@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useLanguage } from '@/context/LanguageContext'
+import { projects } from '@/data/projects'
 
 function ProjectItem({ project, index, setHoveredProject, hoveredProject }) {
   const isHovered = hoveredProject === project.id
 
   return (
-    <div 
-      className="group relative border-t border-white/20 py-8 md:py-12 transition-colors hover:bg-white/5 cursor-pointer"
+    <Link 
+      to={`/project/${project.slug}`}
+      className="group relative block border-t border-white/20 py-8 md:py-12 transition-colors hover:bg-white/5"
       onMouseEnter={() => setHoveredProject(project.id)}
       onMouseLeave={() => setHoveredProject(null)}
     >
@@ -44,7 +47,7 @@ function ProjectItem({ project, index, setHoveredProject, hoveredProject }) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -62,37 +65,6 @@ export function ProjectsPresentation() {
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
-
-  const projects = [
-    {
-      id: 1,
-      title: "At Itif",
-      type: "Sport Data with RAG on chat bot",
-      year: "2025",
-      image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
-    },
-    {
-      id: 2,
-      title: "Ecocycle",
-      type: "E-commerce with chat bot and RAG with n8n",
-      year: "2025",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop"
-    },
-    {
-      id: 3,
-      title: "Youtube Design",
-      type: "Video website with Artistic Direction",
-      year: "2025",
-      image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2500&auto=format&fit=crop"
-    },
-    {
-      id: 4,
-      title: "Portfolio",
-      type: "Portfolio website with React and Tailwind CSS/Animate UI",
-      year: "2025",
-      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=2574&auto=format&fit=crop"
-    }
-  ]
 
   // Trouver l'image active
   const activeImage = projects.find(p => p.id === hoveredProject)?.image

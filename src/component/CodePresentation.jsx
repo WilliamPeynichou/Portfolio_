@@ -39,7 +39,7 @@ const WilliamPeynichou = () => {
     age: 27,
     role: 'Full Stack Developer',
     skills: [
-      'React', 'Node.js', Express, 'Tailwind CSS', 'Three.js', Animate UI,
+      'React', 'Node.js', 'Express', 'Tailwind CSS', 'Three.js', 'Animate UI',
       'JavaScript', 'Symfony', 'MySQL'
     ],
     projects: [
@@ -47,7 +47,7 @@ const WilliamPeynichou = () => {
     ],
     tools: [
       'Cursor', 'Figma', 'Illustrator', Lightroom,
-      'n8n', 'PHPStorm', 'Git', GitHub, Postman, Insomnia,
+      'n8n', 'PHPStorm', 'Git', 'GitHub', 'Postman', 'Insomnia',
     ]
   };
 
@@ -86,8 +86,8 @@ export default WilliamPeynichou;`
           cursor={true}
           lang="jsx"
           writing={isVisible}
-          duration={15000}
-          delay={1000}
+          duration={2000}
+          delay={200}
         />
       </Code>
     </section>
