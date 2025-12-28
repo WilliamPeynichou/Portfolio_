@@ -4,6 +4,15 @@ import FormAddWeightAtIfit from '@/assets/FormAddWeightAt-Ifit.png'
 import GraphiqueWeightAtIfit from '@/assets/GraphiqueWeightAt-Ifit.png'
 import N8nAtIfit from '@/assets/8nAt-Ifit.png'
 
+// Youtube Design (PY) Imports
+import HomePY from '@/assets/HomePY.png'
+import LoginPY from '@/assets/LoginPY.png'
+import AddVideoPY from '@/assets/AddVideoPY.png'
+import AdminPY from '@/assets/AdminPY.png'
+import CommPY from '@/assets/CommPY.png'
+import ListVideoPY from '@/assets/ListVideoPY.png'
+import PageVideoPY from '@/assets/PageVideoPY.png'
+
 export const projects = [
   {
     id: 1,
@@ -11,7 +20,6 @@ export const projects = [
     title: "At Ifit",
     type: "Sport Data with RAG on chat bot",
     year: "2025",
-    // Image principale (login screen)
     image: HomeAtIfit, 
     description: {
       fr: "Cet outil est un double tracker (2-en-1) qui met en corrélation l'évolution du poids avec les activités importées de Strava. Il offre des visualisations graphiques dédiées aux performances sportives ainsi qu'à la perte ou au gain de poids.\n\nLe fonctionnement est simple : après l'inscription, l'utilisateur renseigne son poids actuel, son objectif (perte ou gain) et connecte son compte Strava. Une analyse personnalisée basée sur le profil (genre inclusif, poids) fournit l'IMC et une cible calorique journalière. Une section d'aide détaillée accompagne l'utilisateur pour comprendre chaque métrique.\n\nL'application est inclusive et adaptée à tous : femmes, hommes et personnes transgenres.",
@@ -27,7 +35,6 @@ export const projects = [
       "Bore Tunnel"
     ],
     githubLink: "https://github.com/WilliamPeynichou/At-ifit",
-    // Section spéciale pour n8n
     n8nImage: N8nAtIfit,
     gallery: [
       ScreenLoginAtIfit,
@@ -56,14 +63,21 @@ export const projects = [
     title: "Youtube Design",
     type: "Video website with Artistic Direction",
     year: "2025",
-    image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2500&auto=format&fit=crop",
+    image: HomePY,
     description: {
-      fr: "Refonte conceptuelle de l'interface YouTube avec une direction artistique audacieuse.",
-      en: "Conceptual redesign of the YouTube interface with bold artistic direction."
+      fr: "Une plateforme de streaming vidéo inspirée de YouTube, mettant l'accent sur une interface utilisateur épurée et une direction artistique moderne. Le projet inclut une gestion complète des vidéos, des commentaires et un panneau d'administration.",
+      en: "A video streaming platform inspired by YouTube, focusing on a clean user interface and modern artistic direction. The project includes full video management, comments, and an admin panel."
     },
-    technologies: ["Figma", "React", "CSS Modules"],
+    technologies: ["React", "CSS Modules", "Node.js", "Express", "MySQL"],
     githubLink: null,
-    gallery: []
+    gallery: [
+      LoginPY,
+      PageVideoPY,
+      ListVideoPY,
+      AddVideoPY,
+      CommPY,
+      AdminPY
+    ]
   },
   {
     id: 4,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
@@ -6,10 +6,12 @@ import { projects } from '@/data/projects'
 import ReactIcon from '@/components/icons/react-icon'
 import Footer from '@/component/layout/footer'
 import Header from '@/component/layout/header'
+import ImageModal from '@/component/ImageModal'
 import AtIfitIntroVideo from '@/assets/At-iFitIntro.mov'
 
 function GalleryCarousel({ images, title }) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % images.length)
@@ -29,7 +31,10 @@ function GalleryCarousel({ images, title }) {
 
   return (
     <div className="relative w-full md:w-1/2 mx-auto aspect-video group">
-      <div className="w-full h-full rounded-lg overflow-hidden bg-gray-900 border border-white/10 relative">
+      <div 
+        className="w-full h-full rounded-lg overflow-hidden bg-gray-900 border border-white/10 relative cursor-zoom-in"
+        onClick={() => setIsModalOpen(true)}
+      >
         {images.map((img, index) => (
            <img 
              key={index}
@@ -46,13 +51,13 @@ function GalleryCarousel({ images, title }) {
       {images.length > 1 && (
         <>
           <button 
-            onClick={prevSlide}
+            onClick={(e) => { e.stopPropagation(); prevSlide(); }}
             className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
           >
             <ChevronLeft size={24} />
           </button>
           <button 
-            onClick={nextSlide}
+            onClick={(e) => { e.stopPropagation(); nextSlide(); }}
             className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
           >
             <ChevronRight size={24} />
@@ -63,7 +68,7 @@ function GalleryCarousel({ images, title }) {
             {images.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentIndex(index)}
+                onClick={(e) => { e.stopPropagation(); setCurrentIndex(index); }}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentIndex ? 'bg-white w-8' : 'bg-white/50 w-2 hover:bg-white/80'
                 }`}
@@ -72,6 +77,65 @@ function GalleryCarousel({ images, title }) {
           </div>
         </>
       )}
+
+      <ImageModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        imageSrc={images[currentIndex]} 
+        altText={`${title} view ${currentIndex + 1}`}
+      />
+    </div>
+  )
+}
+
+function TitleOpener({ title, titleOpacity, subtitle, language }) {
+  const [displayText, setDisplayText] = useState(title)
+  const chars = 'ABCDEFGYIJKLNOPQRSTUVWXYZ'
+  const intervalRef = useRef(null)
+
+  const scramble = () => {
+    let iteration = 0
+    clearInterval(intervalRef.current)
+    
+    intervalRef.current = setInterval(() => {
+      setDisplayText(title.split("")
+        .map((char, index) => {
+          if (index < iteration) {
+            return title[index]
+          }
+          return chars[Math.floor(Math.random() * chars.length)]
+        })
+        .join("")
+      )
+      
+      if (iteration >= title.length) {
+        clearInterval(intervalRef.current)
+      }
+      
+      iteration += 1 / 3
+    }, 30)
+  }
+
+  useEffect(() => {
+    scramble()
+    return () => clearInterval(intervalRef.current)
+  }, [title])
+
+  return (
+    <div 
+      className="absolute inset-0 flex flex-col items-center justify-center z-10"
+      style={{ opacity: titleOpacity }}
+    >
+      <h1 
+        className="text-6xl md:text-[12rem] font-bold tracking-tighter text-white text-center leading-none cursor-default"
+        style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}
+        onMouseEnter={scramble}
+      >
+        {displayText}
+      </h1>
+      <p className="text-xl md:text-2xl text-white/70 font-light mt-4">
+        {subtitle}
+      </p>
     </div>
   )
 }
@@ -99,18 +163,13 @@ function VideoOpener({ scrollProgress, titleOpacity }) {
       {/* Overlay gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/80" />
 
-      {/* Title overlay */}
-      <div 
-        className="absolute inset-0 flex flex-col items-center justify-center z-10"
-        style={{ opacity: titleOpacity }}
-      >
-        <h1 className="text-6xl md:text-9xl font-light tracking-tighter text-white text-center">
-          At Ifit
-        </h1>
-        <p className="text-xl md:text-2xl text-white/70 font-light mt-4">
-          {language === 'fr' ? 'Suivi sportif intelligent' : 'Intelligent sports tracking'}
-        </p>
-      </div>
+      {/* Title Scramble Opener */}
+      <TitleOpener 
+        title="At Ifit" 
+        titleOpacity={titleOpacity} 
+        subtitle={language === 'fr' ? 'Suivi sportif intelligent' : 'Intelligent sports tracking'} 
+        language={language}
+      />
 
       {/* Scroll indicator */}
       {scrollProgress < 0.5 && (
@@ -135,6 +194,7 @@ function ProjetAtIfit() {
   const navigate = useNavigate()
   const [scrollProgress, setScrollProgress] = useState(0)
   const [titleOpacity, setTitleOpacity] = useState(1)
+  const [selectedImage, setSelectedImage] = useState(null)
 
   const project = projects.find(p => p.slug === 'at-ifit')
 
@@ -199,11 +259,14 @@ function ProjetAtIfit() {
             </div>
 
             {/* Main Image (Login Screen) */}
-            <div className="w-full md:w-1/2 mx-auto aspect-video rounded-lg overflow-hidden bg-gray-900 mb-20">
+            <div 
+              className="w-full md:w-1/2 mx-auto aspect-video rounded-lg overflow-hidden bg-gray-900 mb-20 cursor-zoom-in"
+              onClick={() => setSelectedImage(project.image)}
+            >
               <img 
                 src={project.image} 
                 alt={project.title} 
-                className="w-full h-full object-contain bg-black"
+                className="w-full h-full object-contain bg-black transition-transform duration-500 hover:scale-105"
               />
             </div>
 
@@ -269,11 +332,14 @@ function ProjetAtIfit() {
                 <h3 className="text-sm font-mono text-gray-500 uppercase tracking-widest mb-8">
                   {language === 'fr' ? 'Architecture IA & Automation' : 'AI & Automation Architecture'}
                 </h3>
-                <div className="w-full md:w-1/2 mx-auto rounded-lg overflow-hidden bg-gray-900 border border-white/10 p-4">
+                <div 
+                  className="w-full md:w-1/2 mx-auto rounded-lg overflow-hidden bg-gray-900 border border-white/10 p-4 cursor-zoom-in"
+                  onClick={() => setSelectedImage(project.n8nImage)}
+                >
                    <img 
                      src={project.n8nImage} 
                      alt="n8n workflow" 
-                     className="w-full h-auto object-contain"
+                     className="w-full h-auto object-contain transition-transform duration-500 hover:scale-105"
                    />
                    <p className="text-sm text-gray-500 mt-4 text-center font-mono">
                      {language === 'fr' ? 'Workflow n8n avec Gemini et outils personnalisés' : 'n8n Workflow powered by Gemini and custom tools'}
@@ -303,6 +369,13 @@ function ProjetAtIfit() {
           <Footer />
         </div>
       </div>
+
+      <ImageModal 
+        isOpen={!!selectedImage} 
+        onClose={() => setSelectedImage(null)} 
+        imageSrc={selectedImage} 
+        altText={project.title}
+      />
     </div>
   )
 }

@@ -1,91 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
-import { projects } from '@/data/projects'
-import ReactIcon from '@/components/icons/react-icon'
+import { workflows } from '@/data/workflows'
 import Footer from '@/component/layout/footer'
 import Header from '@/component/layout/header'
 import ImageModal from '@/component/ImageModal'
-
-function GalleryCarousel({ images, title }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length)
-  }
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
-  }
-
-  // Auto-advance
-  useEffect(() => {
-    const timer = setInterval(nextSlide, 5000)
-    return () => clearInterval(timer)
-  }, [images.length])
-
-  if (!images || images.length === 0) return null
-
-  return (
-    <div className="relative w-full md:w-1/2 mx-auto aspect-video group">
-      <div 
-        className="w-full h-full rounded-lg overflow-hidden bg-gray-900 border border-white/10 relative cursor-zoom-in"
-        onClick={() => setIsModalOpen(true)}
-      >
-        {images.map((img, index) => (
-           <img 
-             key={index}
-             src={img} 
-             alt={`${title} screenshot ${index + 1}`}
-             className={`absolute inset-0 w-full h-full object-contain bg-black/50 transition-opacity duration-700 ease-in-out ${
-               index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-             }`}
-           />
-        ))}
-      </div>
-      
-      {/* Navigation Buttons */}
-      {images.length > 1 && (
-        <>
-          <button 
-            onClick={(e) => { e.stopPropagation(); prevSlide(); }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <button 
-            onClick={(e) => { e.stopPropagation(); nextSlide(); }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-          >
-            <ChevronRight size={24} />
-          </button>
-
-          {/* Dots */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={(e) => { e.stopPropagation(); setCurrentIndex(index); }}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? 'bg-white w-8' : 'bg-white/50 w-2 hover:bg-white/80'
-                }`}
-              />
-            ))}
-          </div>
-        </>
-      )}
-
-      <ImageModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        imageSrc={images[currentIndex]} 
-        altText={`${title} view ${currentIndex + 1}`}
-      />
-    </div>
-  )
-}
 
 function TitleOpener({ title, titleOpacity, subtitle, language }) {
   const [displayText, setDisplayText] = useState(title)
@@ -139,12 +58,11 @@ function TitleOpener({ title, titleOpacity, subtitle, language }) {
   )
 }
 
-function ImageHero({ scrollProgress, titleOpacity, title, subtitle }) {
+function WorkflowHero({ scrollProgress, titleOpacity, title, subtitle }) {
   const { language } = useLanguage()
   
   return (
     <div className="fixed top-0 left-0 w-full h-full z-0 overflow-hidden bg-black">
-      {/* Title Scramble Opener */}
       <TitleOpener 
         title={title} 
         titleOpacity={titleOpacity} 
@@ -170,21 +88,21 @@ function ImageHero({ scrollProgress, titleOpacity, title, subtitle }) {
   )
 }
 
-function YoutubeLike() {
+function VeloExpert() {
   const { language } = useLanguage()
   const navigate = useNavigate()
   const [scrollProgress, setScrollProgress] = useState(0)
   const [titleOpacity, setTitleOpacity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(null)
 
-  const project = projects.find(p => p.slug === 'youtube-design')
+  const workflow = workflows.find(w => w.slug === 'velo-expert')
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    if (!project) {
+    if (!workflow) {
       navigate('/')
     }
-  }, [project, navigate])
+  }, [workflow, navigate])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -199,17 +117,17 @@ function YoutubeLike() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  if (!project) return null
+  if (!workflow) return null
 
   return (
     <div className="relative font-sans text-white bg-black">
       <Header />
 
-      <ImageHero 
+      <WorkflowHero 
         scrollProgress={scrollProgress} 
         titleOpacity={titleOpacity} 
-        title="ODYWP"
-        subtitle={language === 'fr' ? 'Direction Artistique & Streaming' : 'Artistic Direction & Streaming'}
+        title="VELO EXPERT"
+        subtitle={language === 'fr' ? 'Agent IA Expertise Technique' : 'AI Technical Expertise Agent'}
       />
 
       <div className="relative z-10 mt-[100vh]">
@@ -226,22 +144,11 @@ function YoutubeLike() {
 
             <div className="mb-16">
               <h1 className="text-4xl md:text-8xl font-light tracking-tight mb-6">
-                {project.title}
+                {workflow.title}
               </h1>
               <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl">
-                {project.type}
+                {workflow.type}
               </p>
-            </div>
-
-            <div 
-              className="w-full md:w-1/2 mx-auto aspect-video rounded-lg overflow-hidden bg-gray-900 mb-20 cursor-zoom-in"
-              onClick={() => setSelectedImage(project.image)}
-            >
-              <img 
-                src={project.image} 
-                alt={project.title} 
-                className="w-full h-full object-contain bg-black transition-transform duration-500 hover:scale-105"
-              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24">
@@ -250,7 +157,7 @@ function YoutubeLike() {
                   <h3 className="text-sm font-mono text-gray-500 uppercase tracking-widest mb-2">
                     {language === 'fr' ? 'Année' : 'Year'}
                   </h3>
-                  <p className="text-lg">{project.year}</p>
+                  <p className="text-lg">{workflow.year}</p>
                 </div>
 
                 <div>
@@ -258,7 +165,7 @@ function YoutubeLike() {
                     Technologies
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {project.technologies?.map((tech, i) => (
+                    {workflow.technologies?.map((tech, i) => (
                       <span key={i} className="px-3 py-1 bg-white/10 rounded-full text-sm">
                         {tech}
                       </span>
@@ -273,20 +180,11 @@ function YoutubeLike() {
                 </h3>
                 <div className="prose prose-invert prose-lg max-w-none">
                   <p className="text-gray-300 leading-relaxed text-xl font-light whitespace-pre-line">
-                    {project.description?.[language] || project.description?.['en']}
+                    {workflow.description?.[language] || workflow.description?.['en']}
                   </p>
                 </div>
               </div>
             </div>
-
-            {project.gallery && project.gallery.length > 0 && (
-              <div className="space-y-12">
-                <h3 className="text-sm font-mono text-gray-500 uppercase tracking-widest">
-                  {language === 'fr' ? 'Galerie' : 'Gallery'}
-                </h3>
-                <GalleryCarousel images={project.gallery} title={project.title} />
-              </div>
-            )}
           </div>
           <Footer />
         </div>
@@ -295,11 +193,11 @@ function YoutubeLike() {
       <ImageModal 
         isOpen={!!selectedImage} 
         onClose={() => setSelectedImage(null)} 
-        imageSrc={selectedImage} 
-        altText={project.title}
+        imageSrc={selectedImage?.src} 
+        altText={selectedImage?.alt} 
       />
     </div>
   )
 }
 
-export default YoutubeLike
+export default VeloExpert

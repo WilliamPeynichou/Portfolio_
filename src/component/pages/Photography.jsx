@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 import Header from '../layout/header'
 import Footer from '../layout/footer'
+import ImageModal from '@/component/ImageModal'
 
 function Photography() {
   const { language } = useLanguage()
+  const [selectedImage, setSelectedImage] = useState(null)
 
   const photos = [
     { id: 1, src: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=2670&auto=format&fit=crop", title: "Street Life", location: "Tokyo" },
@@ -11,7 +14,7 @@ function Photography() {
     { id: 3, src: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2670&auto=format&fit=crop", title: "Mountain View", location: "Swiss Alps" },
     { id: 4, src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2564&auto=format&fit=crop", title: "Portrait", location: "Studio" },
     { id: 5, src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2670&auto=format&fit=crop", title: "Landscape", location: "Yosemite" },
-    { id: 6, src: "https://images.unsplash.com/photo-1501854140884-074cf2b2c3af?q=80&w=2550&auto=format&fit=crop", title: "Nature", location: "Amazon" },
+    { id: 6, src: "https://images.unsplash.com/photo-1501854140884-074cf2bcf2b2c3af?q=80&w=2550&auto=format&fit=crop", title: "Nature", location: "Amazon" },
   ]
 
   return (
@@ -33,7 +36,11 @@ function Photography() {
         {/* Masonry Grid Simulation */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
           {photos.map((photo) => (
-            <div key={photo.id} className="relative group break-inside-avoid overflow-hidden rounded-lg">
+            <div 
+              key={photo.id} 
+              className="relative group break-inside-avoid overflow-hidden rounded-lg cursor-zoom-in"
+              onClick={() => setSelectedImage({ src: photo.src, alt: photo.title })}
+            >
               <img 
                 src={photo.src} 
                 alt={photo.title}
@@ -47,6 +54,13 @@ function Photography() {
           ))}
         </div>
       </main>
+
+      <ImageModal 
+        isOpen={!!selectedImage} 
+        onClose={() => setSelectedImage(null)} 
+        imageSrc={selectedImage?.src} 
+        altText={selectedImage?.alt} 
+      />
 
       <Footer />
     </div>

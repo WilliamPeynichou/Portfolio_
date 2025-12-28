@@ -88,11 +88,96 @@ function ToolsCarousel({ language }) {
   )
 }
 
+function TitleOpener({ title, titleOpacity, subtitle, language }) {
+  const [displayText, setDisplayText] = useState(title)
+  const chars = 'ABCDEFGYIJKLNOPQRSTUVWXYZ'
+  const intervalRef = useRef(null)
+
+  const scramble = () => {
+    let iteration = 0
+    clearInterval(intervalRef.current)
+    
+    intervalRef.current = setInterval(() => {
+      setDisplayText(title.split("")
+        .map((char, index) => {
+          if (index < iteration) {
+            return title[index]
+          }
+          return chars[Math.floor(Math.random() * chars.length)]
+        })
+        .join("")
+      )
+      
+      if (iteration >= title.length) {
+        clearInterval(intervalRef.current)
+      }
+      
+      iteration += 1 / 3
+    }, 30)
+  }
+
+  useEffect(() => {
+    scramble()
+    return () => clearInterval(intervalRef.current)
+  }, [title])
+
+  return (
+    <div 
+      className="absolute inset-0 flex flex-col items-center justify-center z-10"
+      style={{ opacity: titleOpacity }}
+    >
+      <h1 
+        className="text-6xl md:text-[12rem] font-bold tracking-tighter text-white text-center leading-none cursor-default"
+        style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}
+        onMouseEnter={scramble}
+      >
+        {displayText}
+      </h1>
+      <p className="text-xl md:text-2xl text-white/70 font-light mt-4">
+        {subtitle}
+      </p>
+    </div>
+  )
+}
+
+function ImageHero({ scrollProgress, titleOpacity, title, subtitle }) {
+  const { language } = useLanguage()
+  
+  return (
+    <div className="fixed top-0 left-0 w-full h-full z-0 overflow-hidden bg-black">
+      <TitleOpener 
+        title={title} 
+        titleOpacity={titleOpacity} 
+        subtitle={subtitle} 
+        language={language}
+      />
+
+      {/* Scroll indicator */}
+      {scrollProgress < 0.5 && (
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="w-8 h-8 text-white/80" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function PortfolioProject() {
   const { language } = useLanguage()
   const navigate = useNavigate()
   const project = projects.find(p => p.slug === 'portfolio')
   
+  const [scrollProgress, setScrollProgress] = useState(0)
+  const [titleOpacity, setTitleOpacity] = useState(1)
+
   // Refs pour les éléments animés
   const headerRef = useRef(null)
   const metaRef = useRef(null)
@@ -104,6 +189,19 @@ function PortfolioProject() {
       navigate('/')
     }
   }, [project, navigate])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      const windowHeight = window.innerHeight
+      const progress = Math.min(scrollY / windowHeight, 1)
+      setScrollProgress(progress)
+      setTitleOpacity(Math.max(0, 1 - progress * 2))
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     const observerOptions = { threshold: 0.1 }
@@ -156,14 +254,21 @@ function PortfolioProject() {
       {/* Header standard */}
       <Header />
 
-      <main className="pt-48 pb-32">
+      <ImageHero 
+        scrollProgress={scrollProgress} 
+        titleOpacity={titleOpacity} 
+        title="PORTFOLIO"
+        subtitle={language === 'fr' ? 'Design & Développement' : 'Design & Development'}
+      />
+
+      <main className="relative z-10 mt-[100vh] pt-48 pb-32 bg-black rounded-t-[3rem]">
         {/* Project Hero Header */}
         <section ref={headerRef} className="max-w-7xl mx-auto px-4 md:px-12 mb-32">
           <h2 className="fade-up-header opacity-0 text-sm font-mono text-gray-500 uppercase tracking-[0.3em] mb-8">
             {language === 'fr' ? 'Présentation du Projet' : 'Project Overview'}
           </h2>
-          <h1 className="fade-up-header opacity-0 text-5xl md:text-[10rem] font-light tracking-tighter leading-[0.9] mb-12">
-            Personal <br /> Portfolio
+          <h1 className="fade-up-header opacity-0 text-5xl md:text-8xl font-light tracking-tighter leading-tight mb-12">
+            Personal Portfolio
           </h1>
           <p className="fade-up-header opacity-0 text-xl md:text-3xl font-light text-gray-400 max-w-3xl leading-relaxed">
             {language === 'fr' 
@@ -278,9 +383,8 @@ function PortfolioProject() {
           </div>
 
         </section>
+        <Footer />
       </main>
-
-      <Footer />
     </div>
   )
 }

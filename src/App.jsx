@@ -7,6 +7,9 @@ import ProjetAtIfit from './component/pages/ProjetAt-Ifit'
 import ProjetEcocycle from './component/pages/ProjetEcocycle'
 import YoutubeLike from './component/pages/YoutubeLike'
 import PortfolioProject from './component/pages/PortfolioProject'
+import VeloExpert from './component/pages/VeloExpert'
+import NutritionAssistant from './component/pages/NutritionAssistant'
+import DiscordVeille from './component/pages/DiscordVeille'
 import { LanguageProvider } from './context/LanguageContext'
 
 function App() {
@@ -21,6 +24,9 @@ function App() {
         <Route path="/project/ecocycle" element={<ProjetEcocycle />} />
         <Route path="/project/youtube-design" element={<YoutubeLike />} />
         <Route path="/project/portfolio" element={<PortfolioProject />} />
+        <Route path="/workflow/velo-expert" element={<VeloExpert />} />
+        <Route path="/workflow/assistant-sport-nutrition" element={<NutritionAssistant />} />
+        <Route path="/workflow/bot-veille-discord" element={<DiscordVeille />} />
       </Routes>
     </LanguageProvider>
   )

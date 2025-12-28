@@ -4,6 +4,7 @@ import Footer from './layout/footer';
 import Opener from './opener/opener';
 import CodePresentation from './codePresentation';
 import ProjectsPresentation from './ProjectsPresentation';
+import WorkflowSection from './WorkflowSection';
 import Stacks from './Stacks';
 import ProfileSection from './ProfileSection';
 import VeilleSection from './VeilleSection';
@@ -28,6 +29,7 @@ const Home = () => {
             {/* Chaque section apparaît au scroll */}
             <CodePresentation />
             <ProjectsPresentation />
+            <WorkflowSection />
             <Stacks />
             <ProfileSection />
             <VeilleSection />

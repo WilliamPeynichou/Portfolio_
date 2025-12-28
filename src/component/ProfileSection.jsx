@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
+import ImageModal from '@/component/ImageModal'
 import profileImage from '@/assets/profile.png'
 import cvImage from '@/assets/cv.png'
 
 function ProfileSection() {
   const { language } = useLanguage()
+  const [selectedImage, setSelectedImage] = useState(null)
 
   const content = {
     fr: {
@@ -27,11 +30,14 @@ function ProfileSection() {
   const t = content[language]
 
   return (
-    <section id="about" className="py-32 px-4 md:px-12 max-w-7xl mx-auto flex flex-col gap-24 bg-black text-white">
+    <section id="about" className="py-32 px-4 md:px-12 max-w-7xl mx-auto flex flex-col gap-24 bg-black text-white text-sans">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         
         {/* Photo Section */}
-        <div className="relative aspect-[3/4] w-full max-w-md mx-auto lg:mx-0 bg-gray-900 rounded-lg overflow-hidden group">
+        <div 
+          className="relative aspect-[3/4] w-full max-w-md mx-auto lg:mx-0 bg-gray-900 rounded-lg overflow-hidden group cursor-zoom-in"
+          onClick={() => setSelectedImage({ src: profileImage, alt: "William Peynichou" })}
+        >
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
           
           <img 
@@ -76,7 +82,7 @@ function ProfileSection() {
               </a>
               
               <button 
-                onClick={() => window.open(cvImage, '_blank')}
+                onClick={() => setSelectedImage({ src: cvImage, alt: "CV Preview" })}
                 className="flex-1 px-6 py-4 rounded-full border border-white/20 hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,7 +94,10 @@ function ProfileSection() {
             </div>
 
             {/* CV Preview Area */}
-            <div className="w-full bg-gray-900 rounded-lg overflow-hidden border border-white/10 group cursor-pointer" onClick={() => window.open(cvImage, '_blank')}>
+            <div 
+              className="w-full bg-gray-900 rounded-lg overflow-hidden border border-white/10 group cursor-zoom-in" 
+              onClick={() => setSelectedImage({ src: cvImage, alt: "CV Preview" })}
+            >
               <img 
                 src={cvImage} 
                 alt="CV Preview" 
@@ -99,9 +108,15 @@ function ProfileSection() {
         </div>
 
       </div>
+
+      <ImageModal 
+        isOpen={!!selectedImage} 
+        onClose={() => setSelectedImage(null)} 
+        imageSrc={selectedImage?.src} 
+        altText={selectedImage?.alt} 
+      />
     </section>
   )
 }
 
 export default ProfileSection
-

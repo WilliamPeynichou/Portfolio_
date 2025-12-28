@@ -6,7 +6,7 @@ export const translations = {
   en: {
     header: {
       contact: 'Contact',
-      copyright: '®2024'
+      copyright: '®2025'
     },
     opener: {
       name: 'William Peynichou'
@@ -42,7 +42,7 @@ export const translations = {
   fr: {
     header: {
       contact: 'Contact',
-      copyright: '®2024'
+      copyright: '®2025'
     },
     opener: {
       name: 'William Peynichou'
