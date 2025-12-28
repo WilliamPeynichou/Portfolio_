@@ -1,18 +1,18 @@
-import ScreenLoginAtItif from '@/assets/ScreenLoginAt-Itif.png'
-import HomeAtItif from '@/assets/HomeAt-Itif.png'
-import FormAddWeightAtItif from '@/assets/FormAddWeightAt-Itif.png'
-import GraphiqueWeightAtItif from '@/assets/GraphiqueWeightAt-Itif.png'
-import N8nAtItif from '@/assets/8nAt-Itif.png'
+import ScreenLoginAtIfit from '@/assets/ScreenLoginAt-Ifit.png'
+import HomeAtIfit from '@/assets/HomeAt-Ifit.png'
+import FormAddWeightAtIfit from '@/assets/FormAddWeightAt-Ifit.png'
+import GraphiqueWeightAtIfit from '@/assets/GraphiqueWeightAt-Ifit.png'
+import N8nAtIfit from '@/assets/8nAt-Ifit.png'
 
 export const projects = [
   {
     id: 1,
-    slug: 'at-itif',
-    title: "At Itif",
+    slug: 'at-ifit',
+    title: "At Ifit",
     type: "Sport Data with RAG on chat bot",
     year: "2025",
     // Image principale (login screen)
-    image: ScreenLoginAtItif, 
+    image: HomeAtIfit, 
     description: {
       fr: "Cet outil est un double tracker (2-en-1) qui met en corrélation l'évolution du poids avec les activités importées de Strava. Il offre des visualisations graphiques dédiées aux performances sportives ainsi qu'à la perte ou au gain de poids.\n\nLe fonctionnement est simple : après l'inscription, l'utilisateur renseigne son poids actuel, son objectif (perte ou gain) et connecte son compte Strava. Une analyse personnalisée basée sur le profil (genre inclusif, poids) fournit l'IMC et une cible calorique journalière. Une section d'aide détaillée accompagne l'utilisateur pour comprendre chaque métrique.\n\nL'application est inclusive et adaptée à tous : femmes, hommes et personnes transgenres.",
       en: "This tool is a 2-in-1 tracker correlating weight evolution with Strava activities. It features dedicated charts for both sports performance and weight loss/gain analysis.\n\nHow it works: after signing up, users enter their current weight, their goal (loss or gain), and connect their Strava account. A personalized analysis based on the profile (inclusive gender, weight) provides BMI and a daily caloric target. A detailed help section explains every metric.\n\nThe platform is inclusive and designed for everyone: women, men, and transgender individuals."
@@ -28,11 +28,11 @@ export const projects = [
     ],
     githubLink: "https://github.com/WilliamPeynichou/At-ifit",
     // Section spéciale pour n8n
-    n8nImage: N8nAtItif,
+    n8nImage: N8nAtIfit,
     gallery: [
-      HomeAtItif,
-      FormAddWeightAtItif,
-      GraphiqueWeightAtItif,
+      ScreenLoginAtIfit,
+      FormAddWeightAtIfit,
+      GraphiqueWeightAtIfit,
     ]
   },
   {

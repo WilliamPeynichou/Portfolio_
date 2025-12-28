@@ -10,7 +10,11 @@ function ProjectItem({ project, index, setHoveredProject, hoveredProject }) {
     <Link 
       to={`/project/${project.slug}`}
       className="group relative block border-t border-white/20 py-8 md:py-12 transition-colors hover:bg-white/5"
-      onMouseEnter={() => setHoveredProject(project.id)}
+      onMouseEnter={() => {
+        if (project.slug !== 'portfolio') {
+          setHoveredProject(project.id)
+        }
+      }}
       onMouseLeave={() => setHoveredProject(null)}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col md:flex-row justify-between md:items-baseline gap-4">

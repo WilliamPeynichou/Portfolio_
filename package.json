@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-three/fiber": "^9.4.2",
     "@shadergradient/react": "^2.4.20",
+    "animejs": "^4.2.2",
     "camera-controls": "^3.1.2",
     "cors": "^2.8.5",
     "dompurify": "^3.3.1",
